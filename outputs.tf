@@ -1,3 +1,23 @@
+output "cloudtrail_name" {
+  description = "Name of the multi-Region CloudTrail trail."
+  value       = aws_cloudtrail.audit.name
+}
+
+output "cloudtrail_arn" {
+  description = "ARN of the multi-Region CloudTrail trail."
+  value       = aws_cloudtrail.audit.arn
+}
+
+output "cloudtrail_s3_bucket_id" {
+  description = "ID of the S3 bucket that stores CloudTrail log files."
+  value       = aws_s3_bucket.cloudtrail.id
+}
+
+output "cloudtrail_s3_bucket_arn" {
+  description = "ARN of the S3 bucket that stores CloudTrail log files."
+  value       = aws_s3_bucket.cloudtrail.arn
+}
+
 output "sns_topic_arn" {
   description = "ARN of the SNS topic that delivers audit notifications."
   value       = aws_sns_topic.audit.arn

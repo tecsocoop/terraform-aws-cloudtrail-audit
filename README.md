@@ -1,8 +1,8 @@
 # terraform-aws-cloudtrail-audit
 
 Terraform module that sends email notifications for security-sensitive AWS API
-activity recorded by CloudTrail. It creates EventBridge rules, an SNS topic and
-an email subscription.
+activity. It creates a multi-Region CloudTrail trail, an S3 log bucket,
+EventBridge rules, an SNS topic and an email subscription.
 
 ## Requirements
 
@@ -11,12 +11,12 @@ an email subscription.
 | terraform | >= 1.3.7 |
 | aws       | >= 6.0.0 |
 
-An enabled CloudTrail trail that records management events is required.
-
 ## How it works
 
-The module creates EventBridge rules that match CloudTrail events and sends the
-matched event details to an SNS email subscription.
+The module creates a multi-Region trail that records management events and
+global service events in a versioned, encrypted and private S3 bucket.
+EventBridge rules match those CloudTrail events and send their details to an SNS
+email subscription.
 
 It monitors:
 
@@ -65,7 +65,7 @@ can be delivered.
 
 | Variable | Descripción | Valores | Default |
 |----------|-------------|---------|---------|
-| `name` | Prefix used for SNS and EventBridge resource names. | string, 1-40 characters | - |
+| `name` | Prefix used for all resources created by the module. | lowercase string, 3-40 characters | - |
 | `notification_email` | Email address that receives audit notifications. | valid email address | - |
 | `exception_role_arns` | IAM roles excluded from Secrets Manager read notifications. | `set(string)` of IAM role ARNs | `[]` |
 | `tags` | Additional tags applied to module resources. | `map(string)` | `{}` |
@@ -74,6 +74,10 @@ can be delivered.
 
 | Output | Description |
 |--------|-------------|
+| `cloudtrail_name` | Name of the multi-Region CloudTrail trail. |
+| `cloudtrail_arn` | ARN of the multi-Region CloudTrail trail. |
+| `cloudtrail_s3_bucket_id` | ID of the S3 log bucket. |
+| `cloudtrail_s3_bucket_arn` | ARN of the S3 log bucket. |
 | `sns_topic_arn` | ARN of the SNS notification topic. |
 | `email_subscription_arn` | ARN of the email subscription. |
 | `event_rule_arns` | EventBridge rule ARNs keyed by audit category. |
@@ -81,6 +85,8 @@ can be delivered.
 
 ## References
 
+- Creating a CloudTrail trail: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-a-trail-for-your-aws-account.html
+- CloudTrail S3 bucket policy: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-s3-bucket-policy-for-cloudtrail.html
 - CloudTrail events in EventBridge: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event-cloudtrail.html
 - IAM activity in CloudTrail: https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html
 - Secrets Manager activity in CloudTrail: https://docs.aws.amazon.com/secretsmanager/latest/userguide/monitoring-cloudtrail.html

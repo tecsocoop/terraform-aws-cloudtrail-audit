@@ -1,10 +1,10 @@
 variable "name" {
-  description = "Prefix used to name the SNS topic and EventBridge rules. Example: security-audit"
+  description = "Prefix used to name all resources created by the module. Example: security-audit"
   type        = string
 
   validation {
-    condition     = can(regex("^[0-9A-Za-z._-]+$", var.name)) && length(var.name) >= 1 && length(var.name) <= 40
-    error_message = "name must contain only letters, numbers, periods, underscores, or hyphens and must be between 1 and 40 characters."
+    condition     = can(regex("^[a-z0-9][a-z0-9-]*[a-z0-9]$", var.name)) && length(var.name) >= 3 && length(var.name) <= 40
+    error_message = "name must contain only lowercase letters, numbers, or hyphens; start and end with a letter or number; and be between 3 and 40 characters."
   }
 }
 
