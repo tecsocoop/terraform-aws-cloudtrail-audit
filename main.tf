@@ -22,7 +22,7 @@ resource "aws_sns_topic_subscription" "email" {
 resource "aws_cloudwatch_event_rule" "iam_changes" {
   name        = "${var.name}-iam-changes"
   description = "CloudTrail audit alerts for IAM changes"
-  is_enabled  = var.enable_iam_events
+  is_enabled  = data.aws_region.current.name == "us-east-1"
 
   event_pattern = jsonencode({
     source      = ["aws.iam"]
@@ -118,12 +118,6 @@ resource "aws_cloudwatch_event_rule" "iam_changes" {
 
   tags = var.tags
 
-  lifecycle {
-    precondition {
-      condition     = !var.enable_iam_events || data.aws_region.current.name == "us-east-1"
-      error_message = "enable_iam_events can only be true when the AWS provider region is us-east-1 because IAM is a global service whose CloudTrail events are delivered there."
-    }
-  }
 }
 
 ##################################

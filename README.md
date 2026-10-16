@@ -30,38 +30,22 @@ read operations. IAM and Secrets Manager modification events are not excluded.
 
 ## Region configuration
 
-The module uses the region configured in the AWS provider passed by the root
-module. Secrets Manager events are monitored in that provider region.
+The module inherits the AWS provider configured by the project that consumes
+it. Secrets Manager events are monitored in that provider region.
 
 IAM is a global service and its CloudTrail events are delivered to EventBridge
-in `us-east-1`. Set `enable_iam_events = true` only when the provider passed to
-the module uses `us-east-1`. For deployments in other regions, set it to
-`false` to monitor only regional Secrets Manager events.
+in `us-east-1`. The IAM rule is enabled automatically when the inherited
+provider uses `us-east-1` and disabled in other regions.
 
 ## Usage
 
 ```hcl
-variable "audit_region" {
-  type    = string
-  default = "us-east-1"
-}
-
-provider "aws" {
-  alias  = "audit"
-  region = var.audit_region
-}
-
 module "cloudtrail_audit" {
   source  = "tecsocoop/cloudtrail-audit/aws"
 #  version = "X.X.X" # see the latest available tag
 
-  providers = {
-    aws = aws.audit
-  }
-
   name               = "security-audit"
   notification_email = "security@example.com"
-  enable_iam_events  = var.audit_region == "us-east-1"
 
   exception_role_arns = [
     "arn:aws:iam::123456789012:role/external-secrets-operator",
@@ -83,7 +67,6 @@ can be delivered.
 |----------|-------------|---------|---------|
 | `name` | Prefix used for SNS and EventBridge resource names. | string, 1-40 characters | - |
 | `notification_email` | Email address that receives audit notifications. | valid email address | - |
-| `enable_iam_events` | Enable IAM event monitoring. Requires an AWS provider configured for `us-east-1`. | bool | `true` |
 | `exception_role_arns` | IAM roles excluded from Secrets Manager read notifications. | `set(string)` of IAM role ARNs | `[]` |
 | `tags` | Additional tags applied to module resources. | `map(string)` | `{}` |
 

@@ -24,12 +24,6 @@ variable "exception_role_arns" {
   default     = []
 }
 
-variable "enable_iam_events" {
-  description = "Enable IAM audit events. The AWS provider must use us-east-1 when enabled."
-  type        = bool
-  default     = true
-}
-
 variable "tags" {
   description = "Additional tags applied to all resources created by the module."
   type        = map(string)
