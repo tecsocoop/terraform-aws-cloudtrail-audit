@@ -414,28 +414,43 @@ resource "aws_cloudwatch_event_target" "iam_changes" {
 
   input_transformer {
     input_paths = {
-      account    = "$.account"
-      action     = "$.detail.eventName"
-      event_time = "$.detail.eventTime"
-      identity   = "$.detail.userIdentity"
-      region     = "$.detail.awsRegion"
-      request    = "$.detail.requestParameters"
-      service    = "$.detail.eventSource"
-      source_ip  = "$.detail.sourceIPAddress"
+      access_key_id    = "$.detail.requestParameters.accessKeyId"
+      account          = "$.account"
+      action           = "$.detail.eventName"
+      event_time       = "$.detail.eventTime"
+      group_name       = "$.detail.requestParameters.groupName"
+      identity_arn     = "$.detail.userIdentity.arn"
+      identity_type    = "$.detail.userIdentity.type"
+      policy_arn       = "$.detail.requestParameters.policyArn"
+      policy_name      = "$.detail.requestParameters.policyName"
+      region           = "$.detail.awsRegion"
+      role_name        = "$.detail.requestParameters.roleName"
+      service          = "$.detail.eventSource"
+      session_role_arn = "$.detail.userIdentity.sessionContext.sessionIssuer.arn"
+      source_ip        = "$.detail.sourceIPAddress"
+      user_name        = "$.detail.requestParameters.userName"
     }
 
     input_template = <<-EOT
-      {
-        "alert": "AWS security audit",
-        "action": <action>,
-        "service": <service>,
-        "eventTime": <event_time>,
-        "account": <account>,
-        "region": <region>,
-        "sourceIp": <source_ip>,
-        "identity": <identity>,
-        "request": <request>
-      }
+      "AWS SECURITY AUDIT ALERT"
+      ""
+      "Action: <action>"
+      "Service: <service>"
+      "Date: <event_time>"
+      "Account: <account>"
+      "Region: <region>"
+      "Source IP: <source_ip>"
+      ""
+      "Identity type: <identity_type>"
+      "Executed by: <identity_arn>"
+      "Session role: <session_role_arn>"
+      ""
+      "Affected user: <user_name>"
+      "Affected role: <role_name>"
+      "Affected group: <group_name>"
+      "Policy ARN: <policy_arn>"
+      "Policy name: <policy_name>"
+      "Access key ID: <access_key_id>"
     EOT
   }
 
@@ -449,28 +464,37 @@ resource "aws_cloudwatch_event_target" "secret_changes" {
 
   input_transformer {
     input_paths = {
-      account    = "$.account"
-      action     = "$.detail.eventName"
-      event_time = "$.detail.eventTime"
-      identity   = "$.detail.userIdentity"
-      region     = "$.detail.awsRegion"
-      request    = "$.detail.requestParameters"
-      service    = "$.detail.eventSource"
-      source_ip  = "$.detail.sourceIPAddress"
+      account          = "$.account"
+      action           = "$.detail.eventName"
+      event_time       = "$.detail.eventTime"
+      identity_arn     = "$.detail.userIdentity.arn"
+      identity_type    = "$.detail.userIdentity.type"
+      region           = "$.detail.awsRegion"
+      secret_id        = "$.detail.requestParameters.secretId"
+      secret_name      = "$.detail.requestParameters.name"
+      service          = "$.detail.eventSource"
+      session_role_arn = "$.detail.userIdentity.sessionContext.sessionIssuer.arn"
+      source_ip        = "$.detail.sourceIPAddress"
+      version_stage    = "$.detail.requestParameters.versionStage"
     }
 
     input_template = <<-EOT
-      {
-        "alert": "AWS security audit",
-        "action": <action>,
-        "service": <service>,
-        "eventTime": <event_time>,
-        "account": <account>,
-        "region": <region>,
-        "sourceIp": <source_ip>,
-        "identity": <identity>,
-        "request": <request>
-      }
+      "AWS SECURITY AUDIT ALERT"
+      ""
+      "Action: <action>"
+      "Service: <service>"
+      "Date: <event_time>"
+      "Account: <account>"
+      "Region: <region>"
+      "Source IP: <source_ip>"
+      ""
+      "Identity type: <identity_type>"
+      "Executed by: <identity_arn>"
+      "Session role: <session_role_arn>"
+      ""
+      "Secret ID: <secret_id>"
+      "Secret name: <secret_name>"
+      "Version stage: <version_stage>"
     EOT
   }
 
@@ -484,28 +508,33 @@ resource "aws_cloudwatch_event_target" "secret_reads_direct" {
 
   input_transformer {
     input_paths = {
-      account    = "$.account"
-      action     = "$.detail.eventName"
-      event_time = "$.detail.eventTime"
-      identity   = "$.detail.userIdentity"
-      region     = "$.detail.awsRegion"
-      request    = "$.detail.requestParameters"
-      service    = "$.detail.eventSource"
-      source_ip  = "$.detail.sourceIPAddress"
+      account          = "$.account"
+      action           = "$.detail.eventName"
+      event_time       = "$.detail.eventTime"
+      identity_arn     = "$.detail.userIdentity.arn"
+      identity_type    = "$.detail.userIdentity.type"
+      region           = "$.detail.awsRegion"
+      secret_id        = "$.detail.requestParameters.secretId"
+      service          = "$.detail.eventSource"
+      session_role_arn = "$.detail.userIdentity.sessionContext.sessionIssuer.arn"
+      source_ip        = "$.detail.sourceIPAddress"
     }
 
     input_template = <<-EOT
-      {
-        "alert": "AWS security audit",
-        "action": <action>,
-        "service": <service>,
-        "eventTime": <event_time>,
-        "account": <account>,
-        "region": <region>,
-        "sourceIp": <source_ip>,
-        "identity": <identity>,
-        "request": <request>
-      }
+      "AWS SECURITY AUDIT ALERT"
+      ""
+      "Action: <action>"
+      "Service: <service>"
+      "Date: <event_time>"
+      "Account: <account>"
+      "Region: <region>"
+      "Source IP: <source_ip>"
+      ""
+      "Identity type: <identity_type>"
+      "Executed by: <identity_arn>"
+      "Session role: <session_role_arn>"
+      ""
+      "Secret ID: <secret_id>"
     EOT
   }
 
@@ -519,28 +548,33 @@ resource "aws_cloudwatch_event_target" "secret_reads_assumed_role" {
 
   input_transformer {
     input_paths = {
-      account    = "$.account"
-      action     = "$.detail.eventName"
-      event_time = "$.detail.eventTime"
-      identity   = "$.detail.userIdentity"
-      region     = "$.detail.awsRegion"
-      request    = "$.detail.requestParameters"
-      service    = "$.detail.eventSource"
-      source_ip  = "$.detail.sourceIPAddress"
+      account          = "$.account"
+      action           = "$.detail.eventName"
+      event_time       = "$.detail.eventTime"
+      identity_arn     = "$.detail.userIdentity.arn"
+      identity_type    = "$.detail.userIdentity.type"
+      region           = "$.detail.awsRegion"
+      secret_id        = "$.detail.requestParameters.secretId"
+      service          = "$.detail.eventSource"
+      session_role_arn = "$.detail.userIdentity.sessionContext.sessionIssuer.arn"
+      source_ip        = "$.detail.sourceIPAddress"
     }
 
     input_template = <<-EOT
-      {
-        "alert": "AWS security audit",
-        "action": <action>,
-        "service": <service>,
-        "eventTime": <event_time>,
-        "account": <account>,
-        "region": <region>,
-        "sourceIp": <source_ip>,
-        "identity": <identity>,
-        "request": <request>
-      }
+      "AWS SECURITY AUDIT ALERT"
+      ""
+      "Action: <action>"
+      "Service: <service>"
+      "Date: <event_time>"
+      "Account: <account>"
+      "Region: <region>"
+      "Source IP: <source_ip>"
+      ""
+      "Identity type: <identity_type>"
+      "Executed by: <identity_arn>"
+      "Session role: <session_role_arn>"
+      ""
+      "Secret ID: <secret_id>"
     EOT
   }
 
