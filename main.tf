@@ -9,10 +9,10 @@ data "aws_caller_identity" "current" {}
 ###########################
 
 resource "aws_s3_bucket" "cloudtrail" {
-  bucket = "${var.name}-${data.aws_caller_identity.current.account_id}-logs"
+  bucket = "${var.name}-${data.aws_caller_identity.current.account_id}"
 
   tags = merge(var.tags, {
-    Name = "${var.name}-logs"
+    Name = "${var.name}"
   })
 }
 
