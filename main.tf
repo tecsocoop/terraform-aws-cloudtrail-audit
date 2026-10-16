@@ -4,9 +4,9 @@ data "aws_partition" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-###########################
+############################
 #### CloudTrail storage ####
-###########################
+############################
 
 resource "aws_s3_bucket" "cloudtrail" {
   bucket = "${var.name}-${data.aws_caller_identity.current.account_id}"
@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "cloudtrail_bucket" {
       test     = "StringEquals"
       variable = "aws:SourceArn"
       values = [
-        "arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/${var.name}-trail",
+        "arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/${var.name}",
       ]
     }
   }
@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "cloudtrail_bucket" {
       test     = "StringEquals"
       variable = "aws:SourceArn"
       values = [
-        "arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/${var.name}-trail",
+        "arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/${var.name}",
       ]
     }
   }
@@ -117,12 +117,12 @@ resource "aws_s3_bucket_policy" "cloudtrail" {
   policy = data.aws_iam_policy_document.cloudtrail_bucket.json
 }
 
-########################
+##########################
 #### CloudTrail trail ####
-########################
+##########################
 
 resource "aws_cloudtrail" "audit" {
-  name                          = "${var.name}-trail"
+  name                          = var.name
   s3_bucket_name                = aws_s3_bucket.cloudtrail.id
   enable_logging                = true
   enable_log_file_validation    = true
@@ -135,7 +135,7 @@ resource "aws_cloudtrail" "audit" {
   }
 
   tags = merge(var.tags, {
-    Name = "${var.name}-trail"
+    Name = var.name
   })
 
   depends_on = [
