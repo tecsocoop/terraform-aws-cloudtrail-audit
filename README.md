@@ -9,7 +9,7 @@ an email subscription.
 | Name      | Version  |
 |-----------|----------|
 | terraform | >= 1.3.7 |
-| aws       | >= 5.9.0 |
+| aws       | >= 6.0.0 |
 
 An enabled CloudTrail trail that records management events is required.
 
@@ -47,9 +47,9 @@ module "cloudtrail_audit" {
   name               = "security-audit"
   notification_email = "security@example.com"
 
-  exception_role_arns = [
-    "arn:aws:iam::123456789012:role/external-secrets-operator",
-  ]
+#  exception_role_arns = [
+#    "arn:aws:iam::123456789012:role/external-secrets-operator",
+#  ]
 
   tags = {
     Environment = "production"

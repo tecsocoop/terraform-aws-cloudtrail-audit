@@ -22,7 +22,7 @@ resource "aws_sns_topic_subscription" "email" {
 resource "aws_cloudwatch_event_rule" "iam_changes" {
   name        = "${var.name}-iam-changes"
   description = "CloudTrail audit alerts for IAM changes"
-  is_enabled  = data.aws_region.current.name == "us-east-1"
+  state       = data.aws_region.current.region == "us-east-1" ? "ENABLED" : "DISABLED"
 
   event_pattern = jsonencode({
     source      = ["aws.iam"]
