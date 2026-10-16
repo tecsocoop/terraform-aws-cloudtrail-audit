@@ -414,19 +414,27 @@ resource "aws_cloudwatch_event_target" "iam_changes" {
 
   input_transformer {
     input_paths = {
-      account = "$.account"
-      detail  = "$.detail"
-      region  = "$.region"
-      time    = "$.time"
+      account    = "$.account"
+      action     = "$.detail.eventName"
+      event_time = "$.detail.eventTime"
+      identity   = "$.detail.userIdentity"
+      region     = "$.detail.awsRegion"
+      request    = "$.detail.requestParameters"
+      service    = "$.detail.eventSource"
+      source_ip  = "$.detail.sourceIPAddress"
     }
 
     input_template = <<-EOT
       {
-        "alert": "AWS CloudTrail audit event",
+        "alert": "AWS security audit",
+        "action": <action>,
+        "service": <service>,
+        "eventTime": <event_time>,
         "account": <account>,
-        "time": <time>,
         "region": <region>,
-        "cloudTrailDetail": <detail>
+        "sourceIp": <source_ip>,
+        "identity": <identity>,
+        "request": <request>
       }
     EOT
   }
@@ -441,19 +449,27 @@ resource "aws_cloudwatch_event_target" "secret_changes" {
 
   input_transformer {
     input_paths = {
-      account = "$.account"
-      detail  = "$.detail"
-      region  = "$.region"
-      time    = "$.time"
+      account    = "$.account"
+      action     = "$.detail.eventName"
+      event_time = "$.detail.eventTime"
+      identity   = "$.detail.userIdentity"
+      region     = "$.detail.awsRegion"
+      request    = "$.detail.requestParameters"
+      service    = "$.detail.eventSource"
+      source_ip  = "$.detail.sourceIPAddress"
     }
 
     input_template = <<-EOT
       {
-        "alert": "AWS CloudTrail audit event",
+        "alert": "AWS security audit",
+        "action": <action>,
+        "service": <service>,
+        "eventTime": <event_time>,
         "account": <account>,
-        "time": <time>,
         "region": <region>,
-        "cloudTrailDetail": <detail>
+        "sourceIp": <source_ip>,
+        "identity": <identity>,
+        "request": <request>
       }
     EOT
   }
@@ -468,19 +484,27 @@ resource "aws_cloudwatch_event_target" "secret_reads_direct" {
 
   input_transformer {
     input_paths = {
-      account = "$.account"
-      detail  = "$.detail"
-      region  = "$.region"
-      time    = "$.time"
+      account    = "$.account"
+      action     = "$.detail.eventName"
+      event_time = "$.detail.eventTime"
+      identity   = "$.detail.userIdentity"
+      region     = "$.detail.awsRegion"
+      request    = "$.detail.requestParameters"
+      service    = "$.detail.eventSource"
+      source_ip  = "$.detail.sourceIPAddress"
     }
 
     input_template = <<-EOT
       {
-        "alert": "AWS CloudTrail audit event",
+        "alert": "AWS security audit",
+        "action": <action>,
+        "service": <service>,
+        "eventTime": <event_time>,
         "account": <account>,
-        "time": <time>,
         "region": <region>,
-        "cloudTrailDetail": <detail>
+        "sourceIp": <source_ip>,
+        "identity": <identity>,
+        "request": <request>
       }
     EOT
   }
@@ -495,19 +519,27 @@ resource "aws_cloudwatch_event_target" "secret_reads_assumed_role" {
 
   input_transformer {
     input_paths = {
-      account = "$.account"
-      detail  = "$.detail"
-      region  = "$.region"
-      time    = "$.time"
+      account    = "$.account"
+      action     = "$.detail.eventName"
+      event_time = "$.detail.eventTime"
+      identity   = "$.detail.userIdentity"
+      region     = "$.detail.awsRegion"
+      request    = "$.detail.requestParameters"
+      service    = "$.detail.eventSource"
+      source_ip  = "$.detail.sourceIPAddress"
     }
 
     input_template = <<-EOT
       {
-        "alert": "AWS CloudTrail audit event",
+        "alert": "AWS security audit",
+        "action": <action>,
+        "service": <service>,
+        "eventTime": <event_time>,
         "account": <account>,
-        "time": <time>,
         "region": <region>,
-        "cloudTrailDetail": <detail>
+        "sourceIp": <source_ip>,
+        "identity": <identity>,
+        "request": <request>
       }
     EOT
   }
