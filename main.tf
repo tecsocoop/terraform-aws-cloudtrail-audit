@@ -431,27 +431,28 @@ resource "aws_cloudwatch_event_target" "iam_changes" {
       user_name        = "$.detail.requestParameters.userName"
     }
 
-    input_template = <<-EOT
-      "AWS SECURITY AUDIT ALERT"
-      ""
-      "Action: <action>"
-      "Service: <service>"
-      "Date: <event_time>"
-      "Account: <account>"
-      "Region: <region>"
-      "Source IP: <source_ip>"
-      ""
-      "Identity type: <identity_type>"
-      "Executed by: <identity_arn>"
-      "Session role: <session_role_arn>"
-      ""
-      "Affected user: <user_name>"
-      "Affected role: <role_name>"
-      "Affected group: <group_name>"
-      "Policy ARN: <policy_arn>"
-      "Policy name: <policy_name>"
-      "Access key ID: <access_key_id>"
+    input_template = jsonencode(<<-EOT
+      AWS SECURITY AUDIT ALERT
+
+      Action: <action>
+      Service: <service>
+      Date: <event_time>
+      Account: <account>
+      Region: <region>
+      Source IP: <source_ip>
+
+      Identity type: <identity_type>
+      Executed by: <identity_arn>
+      Session role: <session_role_arn>
+
+      Affected user: <user_name>
+      Affected role: <role_name>
+      Affected group: <group_name>
+      Policy ARN: <policy_arn>
+      Policy name: <policy_name>
+      Access key ID: <access_key_id>
     EOT
+    )
   }
 
   depends_on = [aws_sns_topic_policy.audit]
@@ -478,24 +479,25 @@ resource "aws_cloudwatch_event_target" "secret_changes" {
       version_stage    = "$.detail.requestParameters.versionStage"
     }
 
-    input_template = <<-EOT
-      "AWS SECURITY AUDIT ALERT"
-      ""
-      "Action: <action>"
-      "Service: <service>"
-      "Date: <event_time>"
-      "Account: <account>"
-      "Region: <region>"
-      "Source IP: <source_ip>"
-      ""
-      "Identity type: <identity_type>"
-      "Executed by: <identity_arn>"
-      "Session role: <session_role_arn>"
-      ""
-      "Secret ID: <secret_id>"
-      "Secret name: <secret_name>"
-      "Version stage: <version_stage>"
+    input_template = jsonencode(<<-EOT
+      AWS SECURITY AUDIT ALERT
+
+      Action: <action>
+      Service: <service>
+      Date: <event_time>
+      Account: <account>
+      Region: <region>
+      Source IP: <source_ip>
+
+      Identity type: <identity_type>
+      Executed by: <identity_arn>
+      Session role: <session_role_arn>
+
+      Secret ID: <secret_id>
+      Secret name: <secret_name>
+      Version stage: <version_stage>
     EOT
+    )
   }
 
   depends_on = [aws_sns_topic_policy.audit]
@@ -520,22 +522,23 @@ resource "aws_cloudwatch_event_target" "secret_reads_direct" {
       source_ip        = "$.detail.sourceIPAddress"
     }
 
-    input_template = <<-EOT
-      "AWS SECURITY AUDIT ALERT"
-      ""
-      "Action: <action>"
-      "Service: <service>"
-      "Date: <event_time>"
-      "Account: <account>"
-      "Region: <region>"
-      "Source IP: <source_ip>"
-      ""
-      "Identity type: <identity_type>"
-      "Executed by: <identity_arn>"
-      "Session role: <session_role_arn>"
-      ""
-      "Secret ID: <secret_id>"
+    input_template = jsonencode(<<-EOT
+      AWS SECURITY AUDIT ALERT
+
+      Action: <action>
+      Service: <service>
+      Date: <event_time>
+      Account: <account>
+      Region: <region>
+      Source IP: <source_ip>
+
+      Identity type: <identity_type>
+      Executed by: <identity_arn>
+      Session role: <session_role_arn>
+
+      Secret ID: <secret_id>
     EOT
+    )
   }
 
   depends_on = [aws_sns_topic_policy.audit]
@@ -560,22 +563,23 @@ resource "aws_cloudwatch_event_target" "secret_reads_assumed_role" {
       source_ip        = "$.detail.sourceIPAddress"
     }
 
-    input_template = <<-EOT
-      "AWS SECURITY AUDIT ALERT"
-      ""
-      "Action: <action>"
-      "Service: <service>"
-      "Date: <event_time>"
-      "Account: <account>"
-      "Region: <region>"
-      "Source IP: <source_ip>"
-      ""
-      "Identity type: <identity_type>"
-      "Executed by: <identity_arn>"
-      "Session role: <session_role_arn>"
-      ""
-      "Secret ID: <secret_id>"
+    input_template = jsonencode(<<-EOT
+      AWS SECURITY AUDIT ALERT
+
+      Action: <action>
+      Service: <service>
+      Date: <event_time>
+      Account: <account>
+      Region: <region>
+      Source IP: <source_ip>
+
+      Identity type: <identity_type>
+      Executed by: <identity_arn>
+      Session role: <session_role_arn>
+
+      Secret ID: <secret_id>
     EOT
+    )
   }
 
   depends_on = [aws_sns_topic_policy.audit]
