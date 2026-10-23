@@ -279,6 +279,9 @@ resource "aws_cloudwatch_event_rule" "secret_changes" {
     detail-type = ["AWS API Call via CloudTrail"]
     detail = {
       eventSource = ["secretsmanager.amazonaws.com"]
+      sourceIPAddress = [{
+        "anything-but" = ["rds.amazonaws.com"]
+      }]
       eventName = [
         "CancelRotateSecret",
         "CreateSecret",

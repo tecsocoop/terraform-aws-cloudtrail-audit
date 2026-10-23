@@ -26,7 +26,9 @@ It monitors:
 - Secrets Manager `GetSecretValue` and `BatchGetSecretValue` operations.
 
 Roles listed in `exception_role_arns` do not generate notifications for secret
-read operations. IAM and Secrets Manager modification events are not excluded.
+read operations. Secrets Manager modification events originating from Amazon RDS
+are excluded to avoid notifications for RDS-managed secret rotation. Other IAM
+and Secrets Manager modification events are not excluded.
 
 ## Region configuration
 
